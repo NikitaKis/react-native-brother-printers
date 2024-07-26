@@ -30,6 +30,10 @@ if (useManagedAndroidSdkVersions) {
     }
   }
 }
+dependencies {
+  //implementation files('./libs/BrotherPrintLibrary.aar')
+   implementation fileTree(include: ['*.aar'], dir: 'libs')
+}
 
 android {
   namespace "expo.modules.brotherprinters"
