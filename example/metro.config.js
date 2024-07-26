@@ -1,28 +1,34 @@
-// metro.config.js
-//
-// with multiple workarounds for this issue with symlinks:
-// https://github.com/facebook/metro/issues/1
-//
-// with thanks to @johnryan (<https://github.com/johnryan>)
-// for the pointers to multiple workaround solutions here:
-// https://github.com/facebook/metro/issues/1#issuecomment-541642857
-//
-// see also this discussion:
-// https://github.com/brodybits/create-react-native-module/issues/232
+// Learn more https://docs.expo.io/guides/customizing-metro
+const { getDefaultConfig } = require('expo/metro-config');
+const path = require('path');
 
-const path = require('path')
+const config = getDefaultConfig(__dirname);
 
-module.exports = {
-  // workaround for an issue with symlinks encountered starting with
-  // metro@0.55 / React Native 0.61
-  // (not needed with React Native 0.60 / metro@0.54)
-  resolver: {
-    extraNodeModules: new Proxy(
-      {},
-      { get: (_, name) => path.resolve('.', 'node_modules', name) }
-    )
+// npm v7+ will install ../node_modules/react and ../node_modules/react-native because of peerDependencies.
+// To prevent the incompatible react-native between ./node_modules/react-native and ../node_modules/react-native,
+// excludes the one from the parent folder when bundling.
+config.resolver.blockList = [
+  ...Array.from(config.resolver.blockList ?? []),
+  new RegExp(path.resolve('..', 'node_modules', 'react')),
+  new RegExp(path.resolve('..', 'node_modules', 'react-native')),
+];
+
+config.resolver.nodeModulesPaths = [
+  path.resolve(__dirname, './node_modules'),
+  path.resolve(__dirname, '../node_modules'),
+];
+
+config.resolver.extraNodeModules = {
+  'react-native-brother-printers': '..',
+};
+
+config.watchFolders = [path.resolve(__dirname, '..')];
+
+config.transformer.getTransformOptions = async () => ({
+  transform: {
+    experimentalImportSupport: false,
+    inlineRequires: true,
   },
+});
 
-  // quick workaround for another issue with symlinks
-  watchFolders: [path.resolve('.'), path.resolve('..')]
-}
+module.exports = config;
