@@ -1,43 +1,42 @@
 {
   "name": "react-native-brother-printers",
-  "title": "React Native Brother Printers",
-  "version": "0.0.4",
-  "description": "A package that allows you to printer with brother printers",
-  "main": "index.js",
-  "files": [
-    "README.md",
-    "android",
-    "index.js",
-    "ios",
-    "react-native-brother-printers.podspec"
-  ],
+  "version": "0.1.0",
+  "description": "My new module",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Avery246813579/react-native-brother-printers.git",
-    "baseUrl": "https://github.com/Avery246813579/react-native-brother-printers"
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "lint": "expo-module lint",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module",
+    "open:ios": "xed example/ios",
+    "open:android": "open -a \"Android Studio\" example/android"
   },
   "keywords": [
     "react-native",
-    "brother",
-    "brother-printers",
-    "printers"
+    "expo",
+    "react-native-brother-printers",
+    "ReactNativeBrotherPrinters"
   ],
-  "author": {
-    "name": "Avery Durrant",
-    "email": "avery@dripos.com"
+  "repository": "https://github.com/MultiSafepay/react-native-brother-printers",
+  "bugs": {
+    "url": "https://github.com/MultiSafepay/react-native-brother-printers/issues"
   },
+  "author": "Multisafepay <jose.dominguez@multisafepay.com> (https://github.com/MultiSafepay)",
   "license": "MIT",
-  "readmeFilename": "README.md",
-  "peerDependencies": {
-    "react": ">=16.8.1",
-    "react-native": ">=0.60.0-rc.0 <1.0.x"
-  },
+  "homepage": "https://github.com/MultiSafepay/react-native-brother-printers#readme",
+  "dependencies": {},
   "devDependencies": {
-    "react": "^16.9.0",
-    "react-native": "^0.61.5",
-    "prettier": "^2.2.1"
+    "@types/react": "^18.0.25",
+    "expo-module-scripts": "^3.5.2",
+    "expo-modules-core": "^1.12.19"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "react": "*",
+    "react-native": "*"
   }
 }

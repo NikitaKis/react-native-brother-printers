@@ -1,50 +1,35 @@
 # react-native-brother-printers
 
-React Native Brother Printers is a react-native module that will allow you to interact with the brother printers. 
+My new module
 
-## Getting started
+# API documentation
 
-`$ npm install react-native-brother-printers --save`
+- [Documentation for the main branch](https://github.com/expo/expo/blob/main/docs/pages/versions/unversioned/sdk/react-native-brother-printers.md)
+- [Documentation for the latest stable release](https://docs.expo.dev/versions/latest/sdk/react-native-brother-printers/)
 
-or 
+# Installation in managed Expo projects
 
-`$ yarn add react-native-brother-printers`
+For [managed](https://docs.expo.dev/archive/managed-vs-bare/) Expo projects, please follow the installation instructions in the [API documentation for the latest stable release](#api-documentation). If you follow the link and there is no documentation available then this library is not yet usable within managed projects &mdash; it is likely to be included in an upcoming Expo SDK release.
 
-### Mostly automatic installation
+# Installation in bare React Native projects
 
-`$ cd ios;pod install`
+For bare React Native projects, you must ensure that you have [installed and configured the `expo` package](https://docs.expo.dev/bare/installing-expo-modules/) before continuing.
 
-or if you are using React Native before version 0.60, 
+### Add the package to your npm dependencies
 
-`$ react-native link react-native-brother-printers`
-
-## Usage
-
-### Discovering a printer
-To discover printers use the discoverPrinters function. You can pass in the option parameters `printerName` to change
-the printer name, or V6 to enable ipv6 detection. Both parameters can be left blank. 
-
-```javascript
-import {discoverPrinters, registerBrotherListener} from 'react-native-brother-printers';
-
-discoverPrinters({
-  V6: true,
-});
-
-registerBrotherListener("onDiscoverPrinters", (printers) => {
-  // Store these printers somewhere
-});
+```
+npm install react-native-brother-printers
 ```
 
-### Printing an image
-To print an image, using the `printImage` function, with the first parameter being the printer found during discover,
-the second being the uri of the image you want to print, and the third being an objective that contains the label size.
+### Configure for iOS
 
-You can find a list of LabelSize and LabelNames inside the package as well.
+Run `npx pod-install` after installing the npm package.
 
-```javascript
-import {printImage, LabelSize} from 'react-native-brother-printers';
 
-await printImage(printer, uri, {labelSize: LabelSize.LabelSizeRollW62RB});
-```
+### Configure for Android
 
+
+
+# Contributing
+
+Contributions are very welcome! Please refer to guidelines described in the [contributing guide]( https://github.com/expo/expo#contributing).
