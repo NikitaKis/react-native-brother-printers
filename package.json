@@ -1,9 +1,8 @@
 {
   "name": "react-native-brother-printers-v2",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "My new module",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "main": "index.js",
   "scripts": {
     "build": "expo-module build",
     "clean": "expo-module clean",
@@ -29,14 +28,13 @@
   "license": "MIT",
   "homepage": "https://github.com/MultiSafepay/react-native-brother-printers#readme",
   "dependencies": {},
-  "devDependencies": {
-    "@types/react": "^18.0.25",
-    "expo-module-scripts": "^3.5.2",
-    "expo-modules-core": "^1.12.19"
-  },
   "peerDependencies": {
-    "expo": "*",
-    "react": "*",
-    "react-native": "*"
+    "react": ">=16.8.1",
+    "react-native": ">=0.60.0-rc.0 <1.0.x"
+  },
+  "devDependencies": {
+    "react": "^16.9.0",
+    "react-native": "^0.61.5",
+    "prettier": "^2.2.1"
   }
 }
