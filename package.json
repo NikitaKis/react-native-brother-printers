@@ -2,7 +2,17 @@
   "name": "react-native-brother-printers",
   "version": "0.1.1",
   "description": "My new module",
-  "main": "index.js",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "lint": "expo-module lint",
+    "test": "expo-module test",
+    "test:rsc": "jest --config jest-rsc.config.js",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module"
+  },
   "keywords": [
     "react-native",
     "expo",
@@ -16,14 +26,15 @@
   "author": "Multisafepay <jose.dominguez@multisafepay.com> (https://github.com/MultiSafepay)",
   "license": "MIT",
   "homepage": "https://github.com/MultiSafepay/react-native-brother-printers#readme",
-  "dependencies": {},
-  "peerDependencies": {
-    "react": ">=16.8.1",
-    "react-native": ">=0.60.0-rc.0 <1.0.x"
+  "dependencies": {
+    "@expo/config": "~10.0.11",
+    "@expo/env": "~0.4.2"
   },
   "devDependencies": {
-    "react": "^16.9.0",
-    "react-native": "^0.61.5",
-    "prettier": "^2.2.1"
+    "expo-module-scripts": "^4.0.4"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "react-native": "*"
   }
 }
