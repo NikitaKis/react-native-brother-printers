@@ -93,7 +93,7 @@ class ReactNativeBrotherPrintersModule : Module() {
       val result:PrinterDriverGenerateResult = PrinterDriverGenerator.openChannel(channel);
       if (result.getError().getCode() != OpenChannelError.ErrorCode.NoError) {
           Log.e("", "Error - Open Channel: " + result.getError().getCode());
-          return;
+          return@Function;
       }
 
       val appSpecificExternalDir = File(context.getExternalFilesDir(null), url)
@@ -104,7 +104,7 @@ class ReactNativeBrotherPrintersModule : Module() {
 
       printSettings.setLabelSize(QLPrintSettings.LabelSize.RollW62);
       printSettings.setAutoCut(true);
-      printSettings.setWorkPath(appSpecificExternalDir.toString());
+      //printSettings.setWorkPath(appSpecificExternalDir.toString());
 
       val printError: PrintError = printerDriver.printImage(file.toString(), printSettings);
 
