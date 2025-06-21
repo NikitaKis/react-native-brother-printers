@@ -100,7 +100,7 @@ class ReactNativeBrotherPrintersModule : Module() {
       val file:File = new File(url);
 
       val printerDriver: PrinterDriver = result.getDriver();
-      val printSettings: QLPrintSettings = new QLPrintSettings(PrinterModel.QL_810);
+      val printSettings: QLPrintSettings = QLPrintSettings(PrinterModel.QL_810W);
 
       printSettings.setLabelSize(QLPrintSettings.LabelSize.RollW62);
       printSettings.setAutoCut(true);
