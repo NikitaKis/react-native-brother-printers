@@ -88,7 +88,7 @@ class ReactNativeBrotherPrintersModule : Module() {
       }
     */
 
-
+      val channel: Channel = Channel.newWifiChannel("192.168.2.14");
       val result:PrinterDriverGenerateResult = PrinterDriverGenerator.openChannel(channel);
       if (result.getError().getCode() != OpenChannelError.ErrorCode.NoError) {
           Log.e("", "Error - Open Channel: " + result.getError().getCode());
@@ -106,6 +106,8 @@ class ReactNativeBrotherPrintersModule : Module() {
       printSettings.setAutoCut(true);
       printSettings.setWorkPath(appSpecificExternalDir.toString());
       Log.d("", "url - " + url);
+      val printError: PrintError = printerDriver.printImage(url, printSettings);
+
       val printError: PrintError = printerDriver.printImage(url, printSettings);
 
       if (printError.getCode() != PrintError.ErrorCode.NoError) {
