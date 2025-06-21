@@ -21,8 +21,7 @@ import com.brother.sdk.lmprinter.setting.QLPrintSettings
 
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
-
-
+import expo.modules.kotlin.Promise
 
 class ReactNativeBrotherPrintersModule : Module() {
 
@@ -35,7 +34,7 @@ class ReactNativeBrotherPrintersModule : Module() {
     // The module will be accessible from `requireNativeModule('ReactNativeBrotherPrinters')` in JavaScript.
     Name("ReactNativeBrotherPrinters")
 
-    AsyncFunction("discover") {
+    AsyncFunction("discover") {promise: Promise ->
       // https://support.brother.com/g/s/es/htmldoc/mobilesdk/guide/discover-printer.html
       // return@Function PrinterSearcher.startUSBSearch(context).channels
       Log.d("", "Success - Print Image 1")
@@ -44,8 +43,11 @@ class ReactNativeBrotherPrintersModule : Module() {
           val modelName = channel.extraInfo[Channel.ExtraInfoKey.ModelName] ?: ""
           val ipaddress = channel.channelInfo
           Log.d("TAG", "Model : $modelName, IP Address: $ipaddress")
+          promise.resolve(mapOf(
+            "model" to modelName,
+            "ipAddress" to ipaddress
+          ))
       }
-      return@AsyncFunction result
     }
 
     Function("printImage") { base64image: String ->
