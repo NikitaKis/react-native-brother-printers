@@ -6,6 +6,7 @@ import android.hardware.usb.UsbManager
 import android.util.Base64
 import android.util.Log
 import androidx.core.content.ContextCompat
+import java.io.File
 
 import com.brother.sdk.lmprinter.Channel
 import com.brother.sdk.lmprinter.Channel.newUsbChannel
@@ -96,7 +97,7 @@ class ReactNativeBrotherPrintersModule : Module() {
           return@Function;
       }
 
-      //val appSpecificExternalDir = File(context.getExternalFilesDir(null), url)
+      val appSpecificExternalDir = File(context.getExternalFilesDir(null), url)
       //val file:File = new File(url);
 
       val printerDriver: PrinterDriver = result.getDriver();
@@ -104,7 +105,7 @@ class ReactNativeBrotherPrintersModule : Module() {
 
       printSettings.setLabelSize(QLPrintSettings.LabelSize.RollW62);
       printSettings.setAutoCut(true);
-      //printSettings.setWorkPath(appSpecificExternalDir.toString());
+      printSettings.setWorkPath(appSpecificExternalDir.toString());
 
       val printError: PrintError = printerDriver.printImage(url, printSettings);
 
