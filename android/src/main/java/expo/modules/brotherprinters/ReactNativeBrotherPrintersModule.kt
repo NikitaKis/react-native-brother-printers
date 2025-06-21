@@ -88,7 +88,7 @@ class ReactNativeBrotherPrintersModule : Module() {
     */
 
 
-      Channel channel = Channel.newWifiChannel("192.168.2.14");
+      val channel: channel = Channel.newWifiChannel("192.168.2.14");
 
       PrinterDriverGenerateResult result = PrinterDriverGenerator.openChannel(channel);
       if (result.getError().getCode() != OpenChannelError.ErrorCode.NoError) {
