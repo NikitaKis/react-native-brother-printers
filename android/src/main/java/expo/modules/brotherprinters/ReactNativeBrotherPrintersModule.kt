@@ -88,7 +88,9 @@ class ReactNativeBrotherPrintersModule : Module() {
       }
     */
 
+
       val channel: Channel = Channel.newWifiChannel("192.168.2.14");
+
       val result:PrinterDriverGenerateResult = PrinterDriverGenerator.openChannel(channel);
       if (result.getError().getCode() != OpenChannelError.ErrorCode.NoError) {
           Log.e("", "Error - Open Channel: " + result.getError().getCode());
@@ -96,7 +98,7 @@ class ReactNativeBrotherPrintersModule : Module() {
       }
 
       val appSpecificExternalDir = File(context.getExternalFilesDir(null), url)
-      Log.d("", "appSpecificExternalDir - " + appSpecificExternalDir);
+      Log.d("", "appSpecificExternalDir: " + appSpecificExternalDir.toString());
       //val file:File = new File(url);
 
       val printerDriver: PrinterDriver = result.getDriver();
@@ -105,7 +107,7 @@ class ReactNativeBrotherPrintersModule : Module() {
       printSettings.setLabelSize(QLPrintSettings.LabelSize.RollW62RB);
       printSettings.setAutoCut(true);
       printSettings.setWorkPath(appSpecificExternalDir.toString());
-      Log.d("", "url - " + url);
+      Log.d("", "url: " + url);
       val printError: PrintError = printerDriver.printImage(url, printSettings);
 
       if (printError.getCode() != PrintError.ErrorCode.NoError) {
