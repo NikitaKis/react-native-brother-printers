@@ -104,7 +104,7 @@ class ReactNativeBrotherPrintersModule : Module() {
 
       printSettings.setLabelSize(QLPrintSettings.LabelSize.RollW62);
       printSettings.setAutoCut(true);
-      printSettings.setWorkPath(dir.toString());
+      printSettings.setWorkPath(appSpecificExternalDir.toString());
 
       val printError: PrintError = printerDriver.printImage(file.toString(), printSettings);
 
