@@ -35,7 +35,7 @@ class ReactNativeBrotherPrintersModule : Module() {
     // The module will be accessible from `requireNativeModule('ReactNativeBrotherPrinters')` in JavaScript.
     Name("ReactNativeBrotherPrinters")
 
-    Function("discover") {
+    AsyncFunction("discover") {
       // https://support.brother.com/g/s/es/htmldoc/mobilesdk/guide/discover-printer.html
       // return@Function PrinterSearcher.startUSBSearch(context).channels
       Log.d("", "Success - Print Image 1")
@@ -45,7 +45,7 @@ class ReactNativeBrotherPrintersModule : Module() {
           val ipaddress = channel.channelInfo
           Log.d("TAG", "Model : $modelName, IP Address: $ipaddress")
       }
-      return@Function result
+      return@AsyncFunction result
     }
 
     Function("printImage") { base64image: String ->
