@@ -97,7 +97,12 @@ const {
  * @return {Promise<void>}
  */
 export async function discoverPrinters(params = {}) {
-  return _discoverPrinters(params);
+  if (Platform.OS === 'ios') {
+    return BrotherPrintersIos.discoverPrinters(params);
+  } else {
+    return BrotherPrinters.discover();
+  }
+
 }
 
 /**

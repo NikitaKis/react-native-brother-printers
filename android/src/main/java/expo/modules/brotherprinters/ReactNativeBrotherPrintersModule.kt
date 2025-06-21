@@ -37,7 +37,7 @@ class ReactNativeBrotherPrintersModule : Module() {
     Function("discover") {
       // https://support.brother.com/g/s/es/htmldoc/mobilesdk/guide/discover-printer.html
       // return@Function PrinterSearcher.startUSBSearch(context).channels
-      Log.d("", "Success - Print Image")
+      Log.d("", "Success - Print Image 1")
     }
 
     Function("printImage") { base64image: String ->
