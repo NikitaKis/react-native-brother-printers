@@ -1,7 +1,7 @@
-import { NativeModules } from "react-native";
+import { NativeModules, Platform } from "react-native";
+import BrotherPrinters from "./ReactNativeBrotherPrintersModule";
 
-const { ReactNativeBrotherPrinters } = NativeModules;
-
+const { ReactNativeBrotherPrinters: BrotherPrintersIos } = NativeModules;
 
 export const LabelSizeDieCutW17H87 = 1;
 export const LabelSizeDieCutW23H23 = 2;
@@ -63,6 +63,12 @@ export const LabelSize = {
   LabelSizeDTRollW102H152,
 }
 
+if (!BrotherPrinters && !BrotherPrintersIos) {
+  console.warn(
+    "No native BrotherPrinters module found, are you sure the react-native-brother-printers's module is linked properly?"
+  );
+}
+
 type Device = {
   "ipAddress": string,
   "modelName": string,
@@ -79,7 +85,7 @@ const {
   pingPrinter: _pingPrinter,
   printImage: _printImage,
   printPDF: _printPDF,
-} = ReactNativeBrotherPrinters;
+} = Platform.OS === 'ios' ? BrotherPrintersIos : BrotherPrinters;
 
 /**
  * Starts the discovery process for brother printers
