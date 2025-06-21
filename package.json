@@ -19,13 +19,13 @@
     "react-native-brother-printers",
     "ReactNativeBrotherPrinters"
   ],
-  "repository": "https://github.com/MultiSafepay/react-native-brother-printers",
+  "repository": "https://github.com/NikitaKis/react-native-brother-printers",
   "bugs": {
-    "url": "https://github.com/MultiSafepay/react-native-brother-printers/issues"
+    "url": "https://github.com/NikitaKis/react-native-brother-printers/issues"
   },
   "author": "Multisafepay <jose.dominguez@multisafepay.com> (https://github.com/MultiSafepay)",
   "license": "MIT",
-  "homepage": "https://github.com/MultiSafepay/react-native-brother-printers#readme",
+  "homepage": "https://github.com/NikitaKis/react-native-brother-printers#readme",
   "dependencies": {
     "@expo/config": "~10.0.11",
     "@expo/env": "~0.4.2"
