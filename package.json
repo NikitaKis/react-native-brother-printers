@@ -28,13 +28,12 @@
   "homepage": "https://github.com/NikitaKis/react-native-brother-printers#readme",
   "dependencies": {
     "@expo/config": "~10.0.11",
-    "@expo/env": "~0.4.2"
+    "@expo/env": "~0.4.2",
+    "expo": "~52.0.46",
+    "react-native": "0.76.9"
   },
   "devDependencies": {
     "expo-module-scripts": "^4.0.4"
   },
-  "peerDependencies": {
-    "expo": "*",
-    "react-native": "*"
-  }
+  "peerDependencies": {}
 }
