@@ -117,11 +117,14 @@ export async function discoverPrinters(params = {}) {
  * @return {Promise<*>}
  */
 export async function printImage(device: Device, uri: string, params: PrintParams) {
-  if (!params.labelSize) {
-    return new Error("Label size must be given when printing a label");
-  }
+  if (Platform.OS === 'ios') {
+    if (!params.labelSize) {
+      return new Error("Label size must be given when printing a label");
+    }
 
-  return _printImage(device, uri, params);
+    return _printImage(device, uri, params);
+  }
+  return BrotherPrinters.printImage(uri);
 }
 
 // export {

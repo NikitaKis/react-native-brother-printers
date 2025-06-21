@@ -37,7 +37,6 @@ class ReactNativeBrotherPrintersModule : Module() {
     AsyncFunction("discover") {promise: Promise ->
       // https://support.brother.com/g/s/es/htmldoc/mobilesdk/guide/discover-printer.html
       // return@Function PrinterSearcher.startUSBSearch(context).channels
-      Log.d("", "Success - Print Image 1")
       val option = NetworkSearchOption(15.0, false)
       val result = PrinterSearcher.startNetworkSearch(context, option){ channel ->
           val modelName = channel.extraInfo[Channel.ExtraInfoKey.ModelName] ?: ""
@@ -50,13 +49,13 @@ class ReactNativeBrotherPrintersModule : Module() {
       }
     }
 
-    Function("printImage") { base64image: String ->
+    Function("printImage") { url: String ->
+      /*
       // https://support.brother.com/g/s/es/htmldoc/mobilesdk/guide/print-image.html
-
-// https://support.brother.com/g/s/es/htmldoc/mobilesdk/reference/android_v4/channel.html#newusbchannel
+      // https://support.brother.com/g/s/es/htmldoc/mobilesdk/reference/android_v4/channel.html#newusbchannel
       // https://github.dev/thiendangit/react-native-thermal-receipt-printer-image-qr
           // USBPrinterAdapter.java:109
-   val usbManager : UsbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
+      val usbManager : UsbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
       // TODO check usbManager, use second prop to select proper printer
 
       val channel: Channel = newUsbChannel(usbManager)
@@ -86,7 +85,36 @@ class ReactNativeBrotherPrintersModule : Module() {
       else {
         Log.d("", "Success - Print Image")
       }
+    */
 
+
+      Channel channel = Channel.newWifiChannel("192.168.2.14");
+
+      PrinterDriverGenerateResult result = PrinterDriverGenerator.openChannel(channel);
+      if (result.getError().getCode() != OpenChannelError.ErrorCode.NoError) {
+          Log.e("", "Error - Open Channel: " + result.getError().getCode());
+          return;
+      }
+
+      File dir = getExternalFilesDir(null);
+      File file = new File(url);
+
+      PrinterDriver printerDriver = result.getDriver();
+      QLPrintSettings printSettings = new QLPrintSettings(PrinterModel.QL_810);
+
+      printSettings.setLabelSize(QLPrintSettings.LabelSize.RollW62);
+      printSettings.setAutoCut(true);
+      printSettings.setWorkPath(dir.toString());
+
+      PrintError printError = printerDriver.printImage(file.toString(), printSettings);
+
+      if (printError.getCode() != PrintError.ErrorCode.NoError) {
+          Log.d("", "Error - Print Image: " + printError.getCode());
+      }
+      else {
+          Log.d("", "Success - Print Image");
+      }
+      printerDriver.closeChannel();
       return@Function
     }
 
