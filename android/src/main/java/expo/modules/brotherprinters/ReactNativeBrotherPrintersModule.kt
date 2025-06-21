@@ -16,7 +16,6 @@ import com.brother.sdk.lmprinter.PrinterDriverGenerateResult
 import com.brother.sdk.lmprinter.PrinterDriverGenerator
 import com.brother.sdk.lmprinter.PrinterModel
 import com.brother.sdk.lmprinter.PrinterSearcher
-import com.brother.sdk.lmprinter.NetworkSearchOption
 import com.brother.sdk.lmprinter.setting.QLPrintSettings
 
 import expo.modules.kotlin.modules.Module
@@ -38,13 +37,7 @@ class ReactNativeBrotherPrintersModule : Module() {
     Function("discover") {
       // https://support.brother.com/g/s/es/htmldoc/mobilesdk/guide/discover-printer.html
       // return@Function PrinterSearcher.startUSBSearch(context).channels
-      val option = NetworkSearchOption(15.0, false)
-      val result = PrinterSearcher.startNetworkSearch(context, option){ channel ->
-          val modelName = channel.extraInfo[Channel.ExtraInfoKey.ModelName] ?: ""
-          val ipaddress = channel.channelInfo
-          Log.d("TAG", "Model : $modelName, IP Address: $ipaddress")
-      }
-      return@Function result
+      Log.d("", "Success - Print Image")
     }
 
     Function("printImage") { base64image: String ->
