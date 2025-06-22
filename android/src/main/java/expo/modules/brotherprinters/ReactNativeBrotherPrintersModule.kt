@@ -50,7 +50,7 @@ class ReactNativeBrotherPrintersModule : Module() {
       }
     }
 
-    Function("printImage") { url: String ->
+    Function("printImage") { base64image: String ->
       /*
       // https://support.brother.com/g/s/es/htmldoc/mobilesdk/guide/print-image.html
       // https://support.brother.com/g/s/es/htmldoc/mobilesdk/reference/android_v4/channel.html#newusbchannel
@@ -97,19 +97,18 @@ class ReactNativeBrotherPrintersModule : Module() {
           return@Function;
       }
 
-      val dir = context.getExternalFilesDir(null);
-      Log.d("", "dir: " + dir.toString());
-      val file:File = File(dir, url)
-
       val printerDriver: PrinterDriver = result.getDriver();
       val printSettings: QLPrintSettings = QLPrintSettings(PrinterModel.QL_810W);
-
       printSettings.setLabelSize(QLPrintSettings.LabelSize.RollW62RB);
       printSettings.setAutoCut(true);
+
+      val dir = context.getExternalFilesDir(null);
+      Log.d("", "dir: " + dir.toString());
       printSettings.setWorkPath(dir.toString());
-      Log.d("", "url: " + url);
-      Log.d("", "file.toString(): " + file.toString());
-      val printError: PrintError = printerDriver.printImage(url, printSettings);
+
+      val imageBytes = Base64.decode(base64image, 0)
+      val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+      val printError: PrintError = printerDriver.printImage(image, printSettings);
 
       if (printError.getCode() != PrintError.ErrorCode.NoError) {
           Log.d("", "Error - Print Image: " + printError.getCode());
