@@ -1,4 +1,4 @@
-import { NativeModules, Platform } from "react-native";
+import { NativeEventEmitter, NativeModules, Platform } from "react-native";
 import BrotherPrinters from "./ReactNativeBrotherPrintersModule";
 
 const { ReactNativeBrotherPrinters: BrotherPrintersIos } = NativeModules;
@@ -127,6 +127,11 @@ export async function printImage(device: Device, uri: string, params: PrintParam
   return BrotherPrinters.printImage(uri, device.ipAddress);
 }
 
+const listeners = BrotherPrintersIos && new NativeEventEmitter(BrotherPrintersIos);
+
+export function registerBrotherListener(key: any, method: any) {
+  return listeners && listeners.addListener(key, method);
+}
 // export {
 //   ReactNativeBrotherPrintersView,
 //   ReactNativeBrotherPrintersViewProps,
