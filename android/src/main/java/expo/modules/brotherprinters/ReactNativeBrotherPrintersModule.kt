@@ -109,7 +109,7 @@ class ReactNativeBrotherPrintersModule : Module() {
       printSettings.setWorkPath(dir.toString());
       Log.d("", "url: " + url);
       Log.d("", "file.toString(): " + file.toString());
-      val printError: PrintError = printerDriver.printImage(file.toString(), printSettings);
+      val printError: PrintError = printerDriver.printImage(url, printSettings);
 
       if (printError.getCode() != PrintError.ErrorCode.NoError) {
           Log.d("", "Error - Print Image: " + printError.getCode());
