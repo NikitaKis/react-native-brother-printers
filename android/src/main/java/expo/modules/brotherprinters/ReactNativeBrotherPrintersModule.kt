@@ -97,16 +97,16 @@ class ReactNativeBrotherPrintersModule : Module() {
           return@Function;
       }
 
-      val appSpecificExternalDir = context.getExternalFilesDir(null);
-      Log.d("", "appSpecificExternalDir: " + appSpecificExternalDir.toString());
-      val file:File = File(context.getExternalFilesDir(null), url)
+      val dir = context.getExternalFilesDir(null);
+      Log.d("", "dir: " + dir.toString());
+      val file:File = File(dir, url)
 
       val printerDriver: PrinterDriver = result.getDriver();
       val printSettings: QLPrintSettings = QLPrintSettings(PrinterModel.QL_810W);
 
       printSettings.setLabelSize(QLPrintSettings.LabelSize.RollW62RB);
       printSettings.setAutoCut(true);
-      printSettings.setWorkPath(appSpecificExternalDir.toString());
+      printSettings.setWorkPath(dir.toString());
       Log.d("", "url: " + url);
       Log.d("", "file.toString(): " + file.toString());
       val printError: PrintError = printerDriver.printImage(file.toString(), printSettings);
