@@ -108,6 +108,7 @@ class ReactNativeBrotherPrintersModule : Module() {
 
       val imageBytes = Base64.decode(base64image, 0)
       val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
+      Log.d("", "imageBytes.size: " + imageBytes.size.toString());
       val printError: PrintError = printerDriver.printImage(image, printSettings);
 
       if (printError.getCode() != PrintError.ErrorCode.NoError) {
