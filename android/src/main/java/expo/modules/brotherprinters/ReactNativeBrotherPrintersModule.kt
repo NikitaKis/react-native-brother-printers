@@ -50,63 +50,20 @@ class ReactNativeBrotherPrintersModule : Module() {
       }
     }
 
-    Function("printImage") { url: String ->
-      /*
-      // https://support.brother.com/g/s/es/htmldoc/mobilesdk/guide/print-image.html
-      // https://support.brother.com/g/s/es/htmldoc/mobilesdk/reference/android_v4/channel.html#newusbchannel
-      // https://github.dev/thiendangit/react-native-thermal-receipt-printer-image-qr
-          // USBPrinterAdapter.java:109
-      val usbManager : UsbManager = context.getSystemService(Context.USB_SERVICE) as UsbManager
-      // TODO check usbManager, use second prop to select proper printer
-
-      val channel: Channel = newUsbChannel(usbManager)
-
-      val result:PrinterDriverGenerateResult = PrinterDriverGenerator.openChannel(channel)
-      if (result.error.code != OpenChannelError.ErrorCode.NoError) {
-        Log.e("", "Error - Open Channel: " + result.error.code)
-        return@Function
-      }
-
-      val printerDriver:PrinterDriver = result.driver
-      val printSettings = QLPrintSettings(PrinterModel.QL_800)
-      // TODO check if required
-      // printSettings.labelSize = QLPrintSettings.LabelSize.;
-      printSettings.isAutoCut = true
-      // TODO check
-      // printSettings.workPath = dir.toString();
-
-      val imageBytes = Base64.decode(base64image, 0)
-      val image = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-
-      val printError: PrintError = printerDriver.printImage(image, printSettings)
-
-      if (printError.code != PrintError.ErrorCode.NoError) {
-        Log.d("", "Error - Print Image: " + printError.code)
-      }
-      else {
-        Log.d("", "Success - Print Image")
-      }
-    */
-
-
-      val channel: Channel = Channel.newWifiChannel("192.168.2.14");
-
+    Function("printImage") { url: String, ipAddress: String ->
+      val channel: Channel = Channel.newWifiChannel(ipAddress);
       val result:PrinterDriverGenerateResult = PrinterDriverGenerator.openChannel(channel);
       if (result.getError().getCode() != OpenChannelError.ErrorCode.NoError) {
           Log.e("", "Error - Open Channel: " + result.getError().getCode());
           return@Function;
       }
-
       val dir = context.getExternalFilesDir(null);
-      Log.d("", "dir: " + dir.toString());
-
       val printerDriver: PrinterDriver = result.getDriver();
       val printSettings: QLPrintSettings = QLPrintSettings(PrinterModel.QL_810W);
 
       printSettings.setLabelSize(QLPrintSettings.LabelSize.RollW62RB);
       printSettings.setAutoCut(true);
       printSettings.setWorkPath(dir.toString());
-      Log.d("", "url: " + url);
 
       val printError: PrintError = printerDriver.printImage(url, printSettings);
 

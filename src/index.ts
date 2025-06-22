@@ -124,7 +124,7 @@ export async function printImage(device: Device, uri: string, params: PrintParam
 
     return _printImage(device, uri, params);
   }
-  return BrotherPrinters.printImage(uri);
+  return BrotherPrinters.printImage(uri, device.ipAddress);
 }
 
 // export {
