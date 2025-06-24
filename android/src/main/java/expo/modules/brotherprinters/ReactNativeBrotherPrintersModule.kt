@@ -50,9 +50,9 @@ class ReactNativeBrotherPrintersModule : Module() {
       }
     }
 
-    AsyncFunction("discoverUsb") {promise: Promise ->
+    AsyncFunction("discoverUsb") {
       // https://support.brother.com/g/s/es/htmldoc/mobilesdk/guide/discover-printer.html
-      promise.resolve(PrinterSearcher.startUSBSearch(context).channels)
+      return@Function PrinterSearcher.startUSBSearch(context).channels
     }
 
     Function("printImage") { url: String, ipAddress: String ->
