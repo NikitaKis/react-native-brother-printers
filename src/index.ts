@@ -102,7 +102,14 @@ export async function discoverPrinters(params = {}) {
   } else {
     return BrotherPrinters.discover();
   }
+}
 
+export async function discoverPrintersUsb() {
+  if (Platform.OS === 'ios') {
+    return []
+  } else {
+    return BrotherPrinters.discoverUsb();
+  }
 }
 
 /**
