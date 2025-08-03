@@ -29,28 +29,38 @@ RCT_EXPORT_MODULE()
 
 
 RCT_REMAP_METHOD(startSearchBluetoothPrinter,
+                discoverOptions:(NSDictionary *)options
                  resolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
+
     dispatch_async(dispatch_get_main_queue(), ^{
-        BRLMPrinterSearchResult *searchResult = [BRLMPrinterSearcher startBluetoothSearch];
+        NSLog(@"Called the function");
 
-        //if (searchResult.error.code != BRLMPrinterSearchError) {
-        //    reject(@"search_error", @"Failed to search for printers", nil);
-        //    return;
-        //}
+        _brotherDeviceList = [[NSMutableArray alloc] initWithCapacity:0];
 
-        NSMutableArray *printersArray = [NSMutableArray array];
-        for (BRLMChannel *channel in searchResult.channels) {
-            // You may want to extract more info from the channel if possible.
-            NSDictionary *printerInfo = @{
-                @"channelIdentifier": channel.channelInfo ?: @"",
-                @"interfaceType": @"Bluetooth" // We know it's Bluetooth
-            };
-            [printersArray addObject:printerInfo];
+        _networkManager = [[BRLMPrinterSearcher alloc] init];
+        _networkManager.delegate = self;
+
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"PrinterList" ofType:@"plist"];
+
+        if (path) {
+            NSDictionary *printerDict = [NSDictionary dictionaryWithContentsOfFile:path];
+            NSArray *printerList = [[NSArray alloc] initWithArray:printerDict.allKeys];
+
+            [_networkManager setPrinterNames:printerList];
+        } else {
+            NSLog(@"Could not find PrinterList.plist");
         }
 
-        resolve(printersArray);
+        //    Start printer search
+        int response = [_networkManager startSearch: 5.0];
+
+        if (response == RET_TRUE) {
+            resolve(Nil);
+        } else {
+            reject(DISCOVER_READERS_ERROR, @"A problem occured when trying to execute discoverPrinters", Nil);
+        }
     });
 }
 
