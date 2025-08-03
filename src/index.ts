@@ -104,6 +104,12 @@ export async function discoverPrinters(params = {}) {
   }
 }
 
+export async function ReactNativeBrotherPrinters() {
+  if (Platform.OS === 'ios') {
+    return BrotherPrintersIos.ReactNativeBrotherPrinters();
+  }
+}
+
 export async function discoverPrintersUsb() {
   if (Platform.OS === 'ios') {
     return []

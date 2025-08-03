@@ -27,6 +27,33 @@ RCT_EXPORT_MODULE()
     ];
 }
 
+
+RCT_REMAP_METHOD(startSearchBluetoothPrinter,
+                 resolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        BRLMPrinterSearchResult *searchResult = [BRLMPrinterSearcher startBluetoothSearch];
+
+        if (searchResult.error.code != BRLMPrinterSearcherErrorCodeNoError) {
+            reject(@"search_error", @"Failed to search for printers", nil);
+            return;
+        }
+
+        NSMutableArray *printersArray = [NSMutableArray array];
+        for (BRLMChannel *channel in searchResult.channels) {
+            // You may want to extract more info from the channel if possible.
+            NSDictionary *printerInfo = @{
+                @"channelIdentifier": channel.identifier ?: @"",
+                @"interfaceType": @"Bluetooth" // We know it's Bluetooth
+            };
+            [printersArray addObject:printerInfo];
+        }
+
+        resolve(printersArray);
+    });
+}
+
 RCT_REMAP_METHOD(discoverPrinters, discoverOptions:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     dispatch_async(dispatch_get_main_queue(), ^{
