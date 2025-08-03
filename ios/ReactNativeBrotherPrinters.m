@@ -35,7 +35,7 @@ RCT_REMAP_METHOD(startSearchBluetoothPrinter,
     dispatch_async(dispatch_get_main_queue(), ^{
         BRLMPrinterSearchResult *searchResult = [BRLMPrinterSearcher startBluetoothSearch];
 
-        if (searchResult.error.code != BRLMPrinterSearcherErrorCodeNoError) {
+        if (searchResult.error.code != BRLMPrinterSearchError) {
             reject(@"search_error", @"Failed to search for printers", nil);
             return;
         }
@@ -44,7 +44,7 @@ RCT_REMAP_METHOD(startSearchBluetoothPrinter,
         for (BRLMChannel *channel in searchResult.channels) {
             // You may want to extract more info from the channel if possible.
             NSDictionary *printerInfo = @{
-                @"channelIdentifier": channel.identifier ?: @"",
+                @"channelIdentifier": channel.channelInfo ?: @"",
                 @"interfaceType": @"Bluetooth" // We know it's Bluetooth
             };
             [printersArray addObject:printerInfo];
