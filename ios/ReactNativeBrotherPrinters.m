@@ -35,10 +35,10 @@ RCT_REMAP_METHOD(startSearchBluetoothPrinter,
     dispatch_async(dispatch_get_main_queue(), ^{
         BRLMPrinterSearchResult *searchResult = [BRLMPrinterSearcher startBluetoothSearch];
 
-        if (searchResult.error.code != BRLMPrinterSearchError) {
-            reject(@"search_error", @"Failed to search for printers", nil);
-            return;
-        }
+        //if (searchResult.error.code != BRLMPrinterSearchError) {
+        //    reject(@"search_error", @"Failed to search for printers", nil);
+        //    return;
+        //}
 
         NSMutableArray *printersArray = [NSMutableArray array];
         for (BRLMChannel *channel in searchResult.channels) {
