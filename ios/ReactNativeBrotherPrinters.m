@@ -37,30 +37,14 @@ RCT_REMAP_METHOD(startSearchBluetoothPrinter,
     dispatch_async(dispatch_get_main_queue(), ^{
         NSLog(@"Called the function");
 
-        _brotherDeviceList = [[NSMutableArray alloc] initWithCapacity:0];
-
-        _networkManager = [[BRLMPrinterSearcher alloc] init];
-        _networkManager.delegate = self;
-
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"PrinterList" ofType:@"plist"];
-
-        if (path) {
-            NSDictionary *printerDict = [NSDictionary dictionaryWithContentsOfFile:path];
-            NSArray *printerList = [[NSArray alloc] initWithArray:printerDict.allKeys];
-
-            [_networkManager setPrinterNames:printerList];
-        } else {
-            NSLog(@"Could not find PrinterList.plist");
-        }
-
-        //    Start printer search
-        int response = [_networkManager startSearch: 5.0];
-
-        if (response == RET_TRUE) {
-            resolve(Nil);
-        } else {
-            reject(DISCOVER_READERS_ERROR, @"A problem occured when trying to execute discoverPrinters", Nil);
-        }
+    BRLMBLESearchOption *option = [[BRLMBLESearchOption alloc] init];
+    option.searchDuration = 15;
+    BRLMPrinterSearchResult * result = [BRLMPrinterSearcher startBLESearch:option callback:^(BRLMChannel *channel){
+        NSString *modelName_ = [channel.extraInfo objectForKey:BRLMChannelExtraInfoKeyModelName];
+        NSString *advertiseLocalName = channel.channelInfo;
+        NSLog(@"Model: %@, AdvertiseLocalName: %@", modelName, advertiseLocalName);
+        }];
+    return result;
     });
 }
 
