@@ -8,6 +8,8 @@
 NSString *const DISCOVER_READERS_ERROR = @"DISCOVER_READERS_ERROR";
 NSString *const DISCOVER_READER_ERROR = @"DISCOVER_READER_ERROR";
 NSString *const PRINT_ERROR = @"PRINT_ERROR";
+NSString *const STATUS_ERROR = @"STATUS_ERROR";
+NSString *const BT_SEARCH_ERROR = @"BT_SEARCH_ERROR";
 
 RCT_EXPORT_MODULE()
 
@@ -24,29 +26,52 @@ RCT_EXPORT_MODULE()
         @"onBrotherLog",
 
         @"onDiscoverPrinters",
+        @"onDiscoverBluetoothPrinters"
     ];
 }
 
 
-RCT_REMAP_METHOD(startSearchBluetoothPrinter,
-                discoverOptions:(NSDictionary *)options
-                 resolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject)
-{
-
+RCT_REMAP_METHOD(discoverBluetoothPrinters,
+                 startSearchWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSLog(@"Called the function");
+        BRLMPrinterSearchResult *searcher = [BRLMPrinterSearcher startBluetoothSearch];
+        NSLog(@"%@", searcher.channels);
+        self->_brotherBluetoothDeviceList = [[NSMutableArray alloc] initWithCapacity:0];
 
-    BRLMBLESearchOption *option = [[BRLMBLESearchOption alloc] init];
-    option.searchDuration = 15;
-    BRLMPrinterSearchResult * result = [BRLMPrinterSearcher startBLESearch:option callback:^(BRLMChannel *channel){
-        NSString *modelName_ = [channel.extraInfo objectForKey:BRLMChannelExtraInfoKeyModelName];
-        NSString *advertiseLocalName = channel.channelInfo;
-        NSLog(@"Model: %@, AdvertiseLocalName: %@", modelName, advertiseLocalName);
-        }];
-    return result;
+        NSMutableArray *printerInfos = [NSMutableArray array];
+        for (BRLMChannel *channel in searcher.channels) {
+                    NSLog(@"FOUND BT PRINTER");
+                    // For each channel, retrieve the printer information
+                    NSMutableDictionary<BRLMChannelExtraInfoKey*, NSString*> *extraInfo = channel.extraInfo;
+
+                    // Add printer info to the array (customize this part as needed)
+                    NSString *printerName = extraInfo[BRLMChannelExtraInfoKeyModelName];
+                    NSString *modelName = extraInfo[BRLMChannelExtraInfoKeyModelName];
+                    NSString *serialNumber = extraInfo[BRLMChannelExtraInfoKeySerialNumber];
+                    // Assign channelType to BluetoothMFi
+                    NSString *channelType = @"BluetoothMFi";
+
+                                NSDictionary *printerInfo = @{
+                                    @"printerName": printerName ?: @"Unknown",
+                                    @"modelName": modelName ?: @"Unknown",
+                                    @"serialNumber": serialNumber ?: @"Unknown",
+                                    @"channelType": channelType ?: @"Unknown"
+                                };
+                    [printerInfos addObject:printerInfo];
+
+                }
+        NSLog(@"%@", printerInfos);
+        if (searcher.channels.count == 0) {
+                        NSString *errorDescription = [NSString stringWithFormat:@"Error: %@", searcher.error];
+                        reject(@"BT_SEARCH_ERROR", errorDescription, nil);
+                    } else {
+                        // trigger the didFinishSearch method
+                        [self sendEventWithName:@"onDiscoverBluetoothPrinters" body:printerInfos];
+                        resolve(printerInfos);
+                    }
     });
-}
+}}
 
 RCT_REMAP_METHOD(discoverPrinters, discoverOptions:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
