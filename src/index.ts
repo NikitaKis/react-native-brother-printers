@@ -104,9 +104,9 @@ export async function discoverPrinters(params = {}) {
   }
 }
 
-export async function startSearchBluetoothPrinter(params = {}) {
+export async function discoverBluetoothPrinters() {
   if (Platform.OS === 'ios') {
-    return BrotherPrintersIos.discoverBluetoothPrinters(params);
+    return BrotherPrintersIos.discoverBluetoothPrinters();
   }
 }
 
