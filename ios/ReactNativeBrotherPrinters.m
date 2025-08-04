@@ -85,7 +85,7 @@ RCT_REMAP_METHOD(discoverBluetoothPrinters,
                         resolve(printerInfos);
                     }
     });
-}}
+}
 
 RCT_REMAP_METHOD(discoverPrinters, discoverOptions:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
