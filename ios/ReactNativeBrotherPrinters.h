@@ -7,6 +7,7 @@
 
 @interface ReactNativeBrotherPrinters : RCTEventEmitter <RCTBridgeModule, BRPtouchNetworkDelegate> {
     NSMutableArray *_brotherDeviceList;
+    NSMutableArray *_brotherBluetoothDeviceList;
     BRPtouchNetworkManager    *_networkManager;
     NSString *_imageStr;
 
