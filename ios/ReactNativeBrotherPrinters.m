@@ -35,25 +35,11 @@ RCT_REMAP_METHOD(discoverBluetoothPrinters,
                  startSearchWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject) {
     dispatch_async(dispatch_get_main_queue(), ^{
-
+        BRLMPrinterSearchResult *searcher = [BRLMPrinterSearcher startBluetoothSearch];
+        NSLog(@"%@", searcher.channels);
         self->_brotherBluetoothDeviceList = [[NSMutableArray alloc] initWithCapacity:0];
 
         NSMutableArray *printerInfos = [NSMutableArray array];
-        let searcher = BRLMPrinterSearcher.startBluetoothSearch()
-        NSLog(@"%@", searcher.channels);
-        let list = searcher.channels.map({
-            let info = DiscoveredPrinterInfo()
-            info.printerItemData.channelType = BRLMChannelType.bluetoothMFi
-            info.printerItemData.modelName = $0.extraInfo?.value(forKey: BRLMChannelExtraInfoKeyModelName) as? String ?? ""
-            info.printerItemData.channelInfo = $0.channelInfo
-            info.printerItemData.ipaddress = $0.extraInfo?.value(forKey: BRLMChannelExtraInfoKeyIpAddress) as? String
-            info.printerItemData.advertiseLocalName = $0.extraInfo?.value(forKey: BRLMChannelExtraInfoKeyAdvertiseLocalName) as? String
-            info.printerItemData.macAddress = $0.extraInfo?.value(forKey: BRLMChannelExtraInfoKeyMacAddress) as? String
-            info.printerItemData.nodeName = $0.extraInfo?.value(forKey: BRLMChannelExtraInfoKeyNodeName) as? String
-            info.printerItemData.location = $0.extraInfo?.value(forKey: BRLMChannelExtraInfoKeyLocation) as? String
-            info.printerItemData.serialNumber = $0.extraInfo?.value(forKey: BRLMChannelExtraInfoKeySerialNumber) as? String
-            return info
-        })
         for (BRLMChannel *channel in searcher.channels) {
                     NSLog(@"FOUND BT PRINTER");
                     // For each channel, retrieve the printer information
@@ -85,7 +71,7 @@ RCT_REMAP_METHOD(discoverBluetoothPrinters,
                         resolve(printerInfos);
                     }
     });
-}
+}}
 
 RCT_REMAP_METHOD(discoverPrinters, discoverOptions:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
