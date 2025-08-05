@@ -32,8 +32,9 @@ RCT_EXPORT_MODULE()
 
 
 RCT_REMAP_METHOD(discoverBluetoothPrinters,
-                 startSearchWithResolver:(RCTPromiseResolveBlock)resolve
-                 rejecter:(RCTPromiseRejectBlock)reject) {
+                discoverOptions:(NSDictionary *)options
+                startSearchWithResolver:(RCTPromiseResolveBlock)resolve
+                rejecter:(RCTPromiseRejectBlock)reject) {
     dispatch_async(dispatch_get_main_queue(), ^{
         BRLMPrinterSearchResult *searcher = [BRLMPrinterSearcher startBluetoothSearch];
         NSLog(@"%@", searcher.channels);
@@ -71,7 +72,7 @@ RCT_REMAP_METHOD(discoverBluetoothPrinters,
                         resolve(printerInfos);
                     }
     });
-}}
+}
 
 RCT_REMAP_METHOD(discoverPrinters, discoverOptions:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
