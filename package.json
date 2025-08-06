@@ -1,6 +1,6 @@
 {
   "name": "react-native-brother-printers",
-  "version": "0.3.18",
+  "version": "0.3.19",
   "description": "Brother printers module for React Native",
   "main": "build/index.js",
   "scripts": {
