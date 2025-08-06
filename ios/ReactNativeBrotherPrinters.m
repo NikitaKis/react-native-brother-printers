@@ -124,16 +124,17 @@ RCT_REMAP_METHOD(pingPrinter, printerAddress:(NSString *)ip resolver:(RCTPromise
     resolve(Nil);
 }
 
-
 RCT_REMAP_METHOD(printImage, deviceInfo:(NSDictionary *)device printerUri: (NSString *)imageStr printImageOptions:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSLog(@"Called the printImage function");
     BRPtouchDeviceInfo *deviceInfo = [self deserializeDeviceInfo:device];
 
-    BRLMChannel *channel 
-    if (deviceInfo.strIPAddress == nil || [deviceInfo.strIPAddress isEqualToString:@""]) {
-       channel = [[BRLMChannel alloc] initWithBluetoothSerialNumber:deviceInfo.strSerialNumber];
+    BRLMChannel *channel
+    if ([deviceInfo.strIPAddress isEqualToString:@""]) {
+        // If the IP address is empty, we assume it's a Bluetooth device
+        channel = [[BRLMChannel alloc] initWithBluetoothMFiSerialNumber:deviceInfo.strSerialNumber];
     } else {
+        // Otherwise, we assume it's a WiFi device
         channel = [[BRLMChannel alloc] initWithWifiIPAddress:deviceInfo.strIPAddress];
     }
 
