@@ -70,8 +70,9 @@ if (!BrotherPrinters && !BrotherPrintersIos) {
 }
 
 type Device = {
-  "ipAddress": string,
-  "modelName": string,
+  ipAddress: string,
+  modelName: string,
+  serialNumber: string,
 }
 
 type PrintParams = {
