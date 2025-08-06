@@ -84,7 +84,6 @@ type PrintParams = {
 const {
   discoverPrinters: _discoverPrinters,
   pingPrinter: _pingPrinter,
-  printImage: _printImage,
   printPDF: _printPDF,
 } = Platform.OS === 'ios' ? BrotherPrintersIos : BrotherPrinters;
 
@@ -142,7 +141,7 @@ export async function printImageViaBluetooth(device: Device, uri: string, params
       return new Error("Label size must be given when printing a label");
     }
 
-    return BrotherPrintersIos.printImageViaBluetooth(device, uri, params);
+    return BrotherPrintersIos.bluetoothPrintImage(device, uri, params);
   }
   return BrotherPrinters.printImage(uri, device.ipAddress);
 }
@@ -152,7 +151,7 @@ export async function printImageViaWifi(device: Device, uri: string, params: Pri
     if (!params.labelSize) {
       return new Error("Label size must be given when printing a label");
     }
-    return BrotherPrintersIos.printImageViaWifi(device, uri, params);
+    return BrotherPrintersIos.wifiPrintImage(device, uri, params);
   }
   return BrotherPrinters.printImage(uri, device.ipAddress);
 }
