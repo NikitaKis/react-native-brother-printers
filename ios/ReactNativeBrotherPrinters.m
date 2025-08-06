@@ -124,62 +124,18 @@ RCT_REMAP_METHOD(pingPrinter, printerAddress:(NSString *)ip resolver:(RCTPromise
     resolve(Nil);
 }
 
-RCT_REMAP_METHOD(bluetoothPrintImage, deviceInfo:(NSDictionary *)device printerUri: (NSString *)imageStr printImageOptions:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_REMAP_METHOD(printImage, deviceInfo:(NSDictionary *)device printerUri: (NSString *)imageStr printImageOptions:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 {
     NSLog(@"Called the printImage function");
     BRPtouchDeviceInfo *deviceInfo = [self deserializeDeviceInfo:device];
 
-    BRLMChannel *channel = [[BRLMChannel alloc] initWithBluetoothSerialNumber:deviceInfo.strSerialNumber];
-
-    BRLMPrinterDriverGenerateResult *driverGenerateResult = [BRLMPrinterDriverGenerator openChannel:channel];
-    if (driverGenerateResult.error.code != BRLMOpenChannelErrorCodeNoError ||
-        driverGenerateResult.driver == nil) {
-        NSLog(@"%@", @(driverGenerateResult.error.code));
-        return;
-    }
-
-    BRLMPrinterDriver *printerDriver = driverGenerateResult.driver;
-
-    BRLMPrinterModel model = [BRLMPrinterClassifier transferEnumFromString:deviceInfo.strModelName];
-    BRLMQLPrintSettings *qlSettings = [[BRLMQLPrintSettings alloc] initDefaultPrintSettingsWithPrinterModel:model];
-
-    qlSettings.autoCut = true;
-
-    if (options[@"autoCut"]) {
-        qlSettings.autoCut = [options[@"autoCut"] boolValue];
-    }
-
-    if (options[@"labelSize"]) {
-        qlSettings.labelSize = [options[@"labelSize"] intValue];
-    }
-
-    NSLog(@"Auto Cut: %@, Label Size: %@", options[@"autoCut"], options[@"labelSize"]);
-
-
-    NSURL *url = [NSURL URLWithString:imageStr];
-    BRLMPrintError *printError = [printerDriver printImageWithURL:url settings:qlSettings];
-
-    if (printError.code != BRLMPrintErrorCodeNoError) {
-        NSLog(@"Error - Print Image: %@", printError);
-
-        NSError* error = [NSError errorWithDomain:@"com.react-native-brother-printers.rn" code:1 userInfo:[NSDictionary dictionaryWithObject:printError.description forKey:NSLocalizedDescriptionKey]];
-
-        reject(PRINT_ERROR, @"There was an error trying to print the image", error);
+    BRLMChannel *channel 
+    if (deviceInfo.strIPAddress == nil || [deviceInfo.strIPAddress isEqualToString:@""]) {
+       channel = [[BRLMChannel alloc] initWithBluetoothSerialNumber:deviceInfo.strSerialNumber];
     } else {
-        NSLog(@"Success - Print Image");
-
-        resolve(Nil);
+        channel = [[BRLMChannel alloc] initWithWifiIPAddress:deviceInfo.strIPAddress];
     }
-
-    [printerDriver closeChannel];
-}
-
-RCT_REMAP_METHOD(wifiPrintImage, deviceInfo:(NSDictionary *)device printerUri: (NSString *)imageStr printImageOptions:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
-    NSLog(@"Called the printImage function");
-    BRPtouchDeviceInfo *deviceInfo = [self deserializeDeviceInfo:device];
-
-    BRLMChannel *channel = [[BRLMChannel alloc] initWithWifiIPAddress:deviceInfo.strIPAddress];
 
     BRLMPrinterDriverGenerateResult *driverGenerateResult = [BRLMPrinterDriverGenerator openChannel:channel];
     if (driverGenerateResult.error.code != BRLMOpenChannelErrorCodeNoError ||
