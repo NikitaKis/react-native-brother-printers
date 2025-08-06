@@ -135,13 +135,23 @@ export async function discoverPrintersUsb() {
  *
  * @return {Promise<*>}
  */
-export async function printImage(device: Device, uri: string, params: PrintParams) {
+export async function printImageViaBluetooth(device: Device, uri: string, params: PrintParams) {
   if (Platform.OS === 'ios') {
     if (!params.labelSize) {
       return new Error("Label size must be given when printing a label");
     }
 
-    return _printImage(device, uri, params);
+    return BrotherPrintersIos.printImageViaBluetooth(device, uri, params);
+  }
+  return BrotherPrinters.printImage(uri, device.ipAddress);
+}
+
+export async function printImageViaWifi(device: Device, uri: string, params: PrintParams) {
+  if (Platform.OS === 'ios') {
+    if (!params.labelSize) {
+      return new Error("Label size must be given when printing a label");
+    }
+    return BrotherPrintersIos.printImageViaWifi(device, uri, params);
   }
   return BrotherPrinters.printImage(uri, device.ipAddress);
 }
