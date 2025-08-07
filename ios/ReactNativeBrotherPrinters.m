@@ -130,7 +130,7 @@ RCT_REMAP_METHOD(printImage, deviceInfo:(NSDictionary *)device printerUri: (NSSt
     BRPtouchDeviceInfo *deviceInfo = [self deserializeDeviceInfo:device];
 
     BRLMChannel *channel;
-    if ([deviceInfo.strIPAddress isEqualToString:@""]) {
+    if ([deviceInfo.strIPAddress length] == 0) {
         // If the IP address is empty, we assume it's a Bluetooth device
         channel = [[BRLMChannel alloc] initWithBluetoothSerialNumber:deviceInfo.strSerialNumber];
     } else {
