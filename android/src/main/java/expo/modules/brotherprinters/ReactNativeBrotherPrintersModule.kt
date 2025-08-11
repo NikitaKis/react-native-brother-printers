@@ -50,12 +50,6 @@ class ReactNativeBrotherPrintersModule : Module() {
       }
     }
 
-    AsyncFunction("discoverUsb") {promise: Promise ->
-      // https://support.brother.com/g/s/es/htmldoc/mobilesdk/guide/discover-printer.html
-      // return@Function PrinterSearcher.startUSBSearch(context).channels
-      return@Function;
-    }
-
     Function("printImage") { url: String, ipAddress: String ->
       val channel: Channel = Channel.newWifiChannel(ipAddress);
       val result:PrinterDriverGenerateResult = PrinterDriverGenerator.openChannel(channel);
