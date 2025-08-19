@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 
 group = 'expo.modules.brotherprinters'
-version = '0.1.1'
+version = '0.3.28'
 
 def expoModulesCorePlugin = new File(project(":expo-modules-core").projectDir.absolutePath, "ExpoModulesCorePlugin.gradle")
 apply from: expoModulesCorePlugin
@@ -32,14 +32,15 @@ if (useManagedAndroidSdkVersions) {
 }
 dependencies {
   //implementation files('./libs/BrotherPrintLibrary.aar')
-   implementation fileTree(include: ['*.aar'], dir: 'libs')
+   //implementation fileTree(include: ['*.aar'], dir: 'libs')
+   implementation(name: 'BrotherPrintLibrary', ext: 'aar')
 }
 
 android {
   namespace "expo.modules.brotherprinters"
   defaultConfig {
-    versionCode 1
-    versionName "0.1.1"
+    versionCode 2
+    versionName "0.3.28"
   }
   lintOptions {
     abortOnError false
