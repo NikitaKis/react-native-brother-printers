@@ -140,8 +140,14 @@ export async function printImage(device: Device, uri: string, params: PrintParam
     if (!params.labelSize) {
       return new Error("Label size must be given when printing a label");
     }
-
-    return BrotherPrintersIos.printImage(device, uri, params);
+    try {
+      const result = await BrotherPrintersIos.printImage(device, uri, params);
+      console.log('printImage success:', result); // This won't be reached
+      return result
+    } catch (e) {
+      throw (e)
+    }
+    return
   }
   return BrotherPrinters.printImage(uri, device.ipAddress);
 }
