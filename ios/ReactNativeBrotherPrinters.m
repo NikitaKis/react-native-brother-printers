@@ -142,7 +142,7 @@ RCT_REMAP_METHOD(printImage, deviceInfo:(NSDictionary *)device printerUri: (NSSt
     if (driverGenerateResult.error.code != BRLMOpenChannelErrorCodeNoError ||
         driverGenerateResult.driver == nil) {
         NSLog(@"%@", @(driverGenerateResult.error.code));
-        return;
+        reject(PRINT_ERROR, @"There was an error trying to print the image", driverGenerateResult.error);
     }
 
     BRLMPrinterDriver *printerDriver = driverGenerateResult.driver;
