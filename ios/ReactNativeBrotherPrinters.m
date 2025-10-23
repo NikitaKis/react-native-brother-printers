@@ -142,10 +142,7 @@ RCT_REMAP_METHOD(printImage, deviceInfo:(NSDictionary *)device printerUri: (NSSt
     if (driverGenerateResult.error.code != BRLMOpenChannelErrorCodeNoError ||
         driverGenerateResult.driver == nil) {
         NSLog(@"%@", @(driverGenerateResult.error.code));
-        NSError *openChannelError = [NSError errorWithDomain:@"com.react-native-brother-printers.open-channel"
-                                                        code:driverGenerateResult.error.code
-                                                    userInfo:@{ NSLocalizedDescriptionKey : driverGenerateResult.error ?: @"Unknown error opening channel" }];
-        reject(@"ERROR_CODE", @(driverGenerateResult.error.code), openChannelError);
+        reject(@"ERROR_CODE", driverGenerateResult.error.code, Nil);
         return;
     }
 
