@@ -142,7 +142,7 @@ RCT_REMAP_METHOD(printImage, deviceInfo:(NSDictionary *)device printerUri: (NSSt
     if (driverGenerateResult.error.code != BRLMOpenChannelErrorCodeNoError ||
         driverGenerateResult.driver == nil) {
         NSLog(@"%@", @(driverGenerateResult.error.code));
-        reject(PRINT_ERROR, @"There was an error trying to print the image", Nil);
+        reject(@"ERROR_CODE", @(driverGenerateResult.error.code), Nil);
         return;
     }
 
@@ -168,11 +168,11 @@ RCT_REMAP_METHOD(printImage, deviceInfo:(NSDictionary *)device printerUri: (NSSt
     BRLMPrintError *printError = [printerDriver printImageWithURL:url settings:qlSettings];
 
     if (printError.code != BRLMPrintErrorCodeNoError) {
-        NSLog(@"Error - Print Image: %@", printError);
+        NSLog(@"Error - Print Image: %@", @(printError.code));
 
         NSError* error = [NSError errorWithDomain:@"com.react-native-brother-printers.rn" code:1 userInfo:[NSDictionary dictionaryWithObject:printError.description forKey:NSLocalizedDescriptionKey]];
 
-        reject(PRINT_ERROR, @"There was an error trying to print the image", error);
+        reject(@"ERROR_CODE", @(printError.code).description, error);
     } else {
         NSLog(@"Success - Print Image");
 

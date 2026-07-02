@@ -1,6 +1,6 @@
 {
   "name": "react-native-brother-printers",
-  "version": "0.3.33",
+  "version": "0.4.6",
   "description": "Brother printers module for React Native",
   "main": "build/index.js",
   "scripts": {
@@ -27,13 +27,14 @@
   "license": "MIT",
   "homepage": "https://github.com/NikitaKis/react-native-brother-printers#readme",
   "dependencies": {
-    "@expo/config": "~10.0.11",
+    "@expo/config": "~12.0.7",
     "@expo/env": "~0.4.2",
-    "expo": "~52.0.46",
-    "react-native": "0.76.9"
+    "react": "19.1.0",
+    "expo": "~54.0.1",
+    "react-native": "0.81.4"
   },
   "devDependencies": {
-    "@types/react": "~18.3.12",
+    "@types/react": "~19.1.10",
     "expo-module-scripts": "^4.0.4"
   },
   "peerDependencies": {}
