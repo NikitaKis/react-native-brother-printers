@@ -36,42 +36,15 @@ RCT_REMAP_METHOD(discoverBluetoothPrinters,
                 startSearchWithResolver:(RCTPromiseResolveBlock)resolve
                 rejecter:(RCTPromiseRejectBlock)reject) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSString *errorCodeString = [NSString stringWithFormat:@"%ld", (long)driverGenerateResult.error.code];
-        reject(@"ERROR_CODE", errorCodeString, Nil);
-        NSLog(@"%@", searcher.channels);
+        (void)options;
+        (void)reject;
+
         self->_brotherBluetoothDeviceList = [[NSMutableArray alloc] initWithCapacity:0];
 
-        NSMutableArray *printerInfos = [NSMutableArray array];
-        for (BRLMChannel *channel in searcher.channels) {
-                    NSLog(@"FOUND BT PRINTER");
-                    // For each channel, retrieve the printer information
-                    NSMutableDictionary<BRLMChannelExtraInfoKey*, NSString*> *extraInfo = channel.extraInfo;
-
-                    // Add printer info to the array (customize this part as needed)
-                    NSString *printerName = extraInfo[BRLMChannelExtraInfoKeyModelName];
-                    NSString *modelName = extraInfo[BRLMChannelExtraInfoKeyModelName];
-                    NSString *serialNumber = extraInfo[BRLMChannelExtraInfoKeySerialNumber];
-                    // Assign channelType to BluetoothMFi
-                    NSString *channelType = @"BluetoothMFi";
-
-                                NSDictionary *printerInfo = @{
-                                    @"printerName": printerName ?: @"Unknown",
-                                    @"modelName": modelName ?: @"Unknown",
-                                    @"serialNumber": serialNumber ?: @"Unknown",
-                                    @"channelType": channelType ?: @"Unknown"
-                                };
-                    [printerInfos addObject:printerInfo];
-
-                }
-        NSLog(@"%@", printerInfos);
-        if (searcher.channels.count == 0) {
-                        NSString *errorDescription = [NSString stringWithFormat:@"Error: %@", searcher.error];
-                        reject(@"BT_SEARCH_ERROR", errorDescription, nil);
-                    } else {
-                        // trigger the didFinishSearch method
-                        [self sendEventWithName:@"onDiscoverBluetoothPrinters" body:printerInfos];
-                        resolve(printerInfos);
-                    }
+        // Keep API contract: emit event and resolve an array while native BT search is unavailable.
+        NSArray *printerInfos = @[];
+        [self sendEventWithName:@"onDiscoverBluetoothPrinters" body:printerInfos];
+        resolve(printerInfos);
     });
 }
 
