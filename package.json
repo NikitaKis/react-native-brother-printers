@@ -27,16 +27,16 @@
   "license": "MIT",
   "homepage": "https://github.com/NikitaKis/react-native-brother-printers#readme",
   "dependencies": {
-    "@expo/config": "~56.0.10",
+    "@expo/config": "~57.0.1",
     "@expo/env": "~2.4.0",
-    "react": "19.1.0",
-    "expo": "~56.0.13",
-    "react-native": "0.81.5"
+    "react": "19.2.3",
+    "expo": "~57.0.1",
+    "react-native": "0.86.0"
   },
   "devDependencies": {
-    "@types/react": "~19.1.10",
+    "@types/react": "~19.2.2",
     "expo-module-scripts": "^56.0.3",
-    "typescript": "^5.9.2"
+    "typescript": "~6.0.3"
   },
   "peerDependencies": {}
 }
