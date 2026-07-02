@@ -36,7 +36,8 @@ RCT_REMAP_METHOD(discoverBluetoothPrinters,
                 startSearchWithResolver:(RCTPromiseResolveBlock)resolve
                 rejecter:(RCTPromiseRejectBlock)reject) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        BRLMPrinterSearchResult *searcher = [BRLMPrinterSearcher startBluetoothSearch];
+        NSString *errorCodeString = [NSString stringWithFormat:@"%ld", (long)driverGenerateResult.error.code];
+        reject(@"ERROR_CODE", errorCodeString, Nil);
         NSLog(@"%@", searcher.channels);
         self->_brotherBluetoothDeviceList = [[NSMutableArray alloc] initWithCapacity:0];
 
@@ -142,7 +143,8 @@ RCT_REMAP_METHOD(printImage, deviceInfo:(NSDictionary *)device printerUri: (NSSt
     if (driverGenerateResult.error.code != BRLMOpenChannelErrorCodeNoError ||
         driverGenerateResult.driver == nil) {
         NSLog(@"%@", @(driverGenerateResult.error.code));
-        reject(@"ERROR_CODE", @(driverGenerateResult.error.code), Nil);
+        NSString *errorCodeString = [NSString stringWithFormat:@"%ld", (long)driverGenerateResult.error.code];
+        reject(@"ERROR_CODE", errorCodeString, Nil);
         return;
     }
 
