@@ -1,8 +1,8 @@
 // main index.js
 
-import {NativeModules, NativeEventEmitter} from "react-native";
+import { NativeEventEmitter, NativeModules } from 'react-native';
 
-const {ReactNativeBrotherPrinters} = NativeModules;
+const { ReactNativeBrotherPrinters } = NativeModules;
 
 export const LabelSizeDieCutW17H87 = 1;
 export const LabelSizeDieCutW23H23 = 2;
@@ -62,37 +62,37 @@ export const LabelSize = {
   LabelSizeDTRollW102,
   LabelSizeDTRollW102H51,
   LabelSizeDTRollW102H152,
-}
+};
 
 export const LabelNames = [
-  "Die Cut 17mm x 54mm",
-  "Die Cut 17mm x 87mm",
-  "Die Cut 23mm x 23mm",
-  "Die Cut 29mm x 42mm",
-  "Die Cut 29mm x 90mm",
-  "Die Cut 38mm x 90mm",
-  "Die Cut 39mm x 48mm",
-  "Die Cut 52mm x 29mm",
-  "Die Cut 62mm x 29mm",
-  "Die Cut 62mm x 10mm",
-  "Die Cut 60mm x 86mm",
-  "Die Cut 54mm x 29mm",
-  "Die Cut 102mm x 51mm",
-  "Die Cut 102mm x 152mm",
-  "Die Cut 103mm x 164mm",
-  "12mm",
-  "29mm",
-  "38mm",
-  "50mm",
-  "54mm",
-  "62mm",
-  "62mm RB",
-  "10mm 2",
-  "10mm 3",
-  "DT 90mm",
-  "DT 102mm",
-  "DT 102mm x 51mm",
-  "DT 102mm x 152mm",
+  'Die Cut 17mm x 54mm',
+  'Die Cut 17mm x 87mm',
+  'Die Cut 23mm x 23mm',
+  'Die Cut 29mm x 42mm',
+  'Die Cut 29mm x 90mm',
+  'Die Cut 38mm x 90mm',
+  'Die Cut 39mm x 48mm',
+  'Die Cut 52mm x 29mm',
+  'Die Cut 62mm x 29mm',
+  'Die Cut 62mm x 10mm',
+  'Die Cut 60mm x 86mm',
+  'Die Cut 54mm x 29mm',
+  'Die Cut 102mm x 51mm',
+  'Die Cut 102mm x 152mm',
+  'Die Cut 103mm x 164mm',
+  '12mm',
+  '29mm',
+  '38mm',
+  '50mm',
+  '54mm',
+  '62mm',
+  '62mm RB',
+  '10mm 2',
+  '10mm 3',
+  'DT 90mm',
+  'DT 102mm',
+  'DT 102mm x 51mm',
+  'DT 102mm x 152mm',
 ];
 
 const {
@@ -148,7 +148,7 @@ export async function pingPrinter(ip) {
  */
 export async function printImage(device, uri, params = {}) {
   if (!params.labelSize) {
-    return new Error("Label size must be given when printing a label");
+    return new Error('Label size must be given when printing a label');
   }
 
   return _printImage(device, uri, params);
