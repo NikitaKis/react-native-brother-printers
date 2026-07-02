@@ -97,6 +97,7 @@ export const LabelNames = [
 
 const {
   discoverPrinters: _discoverPrinters,
+  discoverBluetoothPrinters: _discoverBluetoothPrinters,
   pingPrinter: _pingPrinter,
   printImage: _printImage,
   printPDF: _printPDF,
@@ -113,6 +114,14 @@ const {
  */
 export async function discoverPrinters(params = {}) {
   return _discoverPrinters(params);
+}
+
+export async function discoverBluetoothPrinters(params = {}) {
+  if (!_discoverBluetoothPrinters) {
+    return [];
+  }
+
+  return _discoverBluetoothPrinters(params);
 }
 
 /**

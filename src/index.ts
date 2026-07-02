@@ -106,8 +106,18 @@ export async function discoverPrinters(params = {}) {
 
 export async function discoverBluetoothPrinters(params = {}) {
   if (Platform.OS === 'ios') {
+    if (!BrotherPrintersIos?.discoverBluetoothPrinters) {
+      console.warn('discoverBluetoothPrinters is not available on iOS native module. Returning empty list.');
+      return [];
+    }
     return BrotherPrintersIos.discoverBluetoothPrinters(params);
   }
+
+  if (!BrotherPrinters?.discoverBluetoothPrinters) {
+    return [];
+  }
+
+  return BrotherPrinters.discoverBluetoothPrinters(params);
 }
 
 export async function ReactNativeBrotherPrinters() {
