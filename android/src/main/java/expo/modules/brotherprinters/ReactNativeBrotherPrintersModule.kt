@@ -26,6 +26,21 @@ import expo.modules.kotlin.Promise
 
 class ReactNativeBrotherPrintersModule : Module() {
 
+  private fun discoverNetworkPrinter(promise: Promise) {
+    val option = NetworkSearchOption(15.0, false)
+    PrinterSearcher.startNetworkSearch(context, option) { channel ->
+      val modelName = channel.extraInfo[Channel.ExtraInfoKey.ModelName] ?: ""
+      val ipaddress = channel.channelInfo
+      Log.d("ReactNativeBrotherPrinters", "Model: $modelName, IP Address: $ipaddress")
+      promise.resolve(
+        mapOf(
+          "model" to modelName,
+          "ipAddress" to ipaddress
+        )
+      )
+    }
+  }
+
   // Each module class must implement the definition function. The definition consists of components
   // that describes the module's functionality and behavior.
   // See https://docs.expo.dev/modules/module-api for more details about available components.
@@ -35,19 +50,17 @@ class ReactNativeBrotherPrintersModule : Module() {
     // The module will be accessible from `requireNativeModule('ReactNativeBrotherPrinters')` in JavaScript.
     Name("ReactNativeBrotherPrinters")
 
-    AsyncFunction("discover") {promise: Promise ->
-      // https://support.brother.com/g/s/es/htmldoc/mobilesdk/guide/discover-printer.html
-      // return@Function PrinterSearcher.startUSBSearch(context).channels
-      val option = NetworkSearchOption(15.0, false)
-      val result = PrinterSearcher.startNetworkSearch(context, option){ channel ->
-          val modelName = channel.extraInfo[Channel.ExtraInfoKey.ModelName] ?: ""
-          val ipaddress = channel.channelInfo
-          Log.d("TAG", "Model : $modelName, IP Address: $ipaddress")
-          promise.resolve(mapOf(
-            "model" to modelName,
-            "ipAddress" to ipaddress
-          ))
-      }
+    AsyncFunction("discover") { promise: Promise ->
+      discoverNetworkPrinter(promise)
+    }
+
+    AsyncFunction("discoverPrinters") { promise: Promise ->
+      discoverNetworkPrinter(promise)
+    }
+
+    AsyncFunction("discoverPrintersUsb") { promise: Promise ->
+      // USB discovery is currently not implemented for Expo Modules Android bridge.
+      promise.resolve(null)
     }
 
     Function("printImage") { url: String, ipAddress: String ->

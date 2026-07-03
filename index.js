@@ -1,8 +1,21 @@
 // main index.js
 
+import { requireOptionalNativeModule } from 'expo-modules-core';
 import { NativeEventEmitter, NativeModules } from 'react-native';
 
-const { ReactNativeBrotherPrinters } = NativeModules;
+const ReactNativeBrotherPrinters =
+  requireOptionalNativeModule('ReactNativeBrotherPrinters') ??
+  NativeModules.ReactNativeBrotherPrinters;
+
+function getBrotherModule() {
+  if (!ReactNativeBrotherPrinters) {
+    throw new Error(
+      'ReactNativeBrotherPrinters native module is unavailable. Rebuild native app and verify autolinking.',
+    );
+  }
+
+  return ReactNativeBrotherPrinters;
+}
 
 export const LabelSizeDieCutW17H87 = 1;
 export const LabelSizeDieCutW23H23 = 2;
@@ -95,14 +108,6 @@ export const LabelNames = [
   'DT 102mm x 152mm',
 ];
 
-const {
-  discoverPrinters: _discoverPrinters,
-  discoverBluetoothPrinters: _discoverBluetoothPrinters,
-  pingPrinter: _pingPrinter,
-  printImage: _printImage,
-  printPDF: _printPDF,
-} = ReactNativeBrotherPrinters;
-
 /**
  * Starts the discovery process for brother printers
  *
@@ -113,15 +118,37 @@ const {
  * @return {Promise<void>}
  */
 export async function discoverPrinters(params = {}) {
-  return _discoverPrinters(params);
+  const mod = getBrotherModule();
+
+  if (typeof mod.discoverPrinters === 'function') {
+    return mod.discoverPrinters(params);
+  }
+
+  if (typeof mod.discover === 'function') {
+    return mod.discover(params);
+  }
+
+  throw new Error('discoverPrinters is not implemented in native module');
+}
+
+export async function discoverPrintersUsb(params = {}) {
+  const mod = getBrotherModule();
+
+  if (typeof mod.discoverPrintersUsb === 'function') {
+    return mod.discoverPrintersUsb(params);
+  }
+
+  return null;
 }
 
 export async function discoverBluetoothPrinters(params = {}) {
-  if (!_discoverBluetoothPrinters) {
+  const mod = getBrotherModule();
+
+  if (typeof mod.discoverBluetoothPrinters !== 'function') {
     return [];
   }
 
-  return _discoverBluetoothPrinters(params);
+  return mod.discoverBluetoothPrinters(params);
 }
 
 /**
@@ -132,7 +159,13 @@ export async function discoverBluetoothPrinters(params = {}) {
  * @return {Promise<void>}
  */
 export async function pingPrinter(ip) {
-  return _pingPrinter(ip);
+  const mod = getBrotherModule();
+
+  if (typeof mod.pingPrinter !== 'function') {
+    throw new Error('pingPrinter is not implemented in native module');
+  }
+
+  return mod.pingPrinter(ip);
 }
 
 /**
@@ -147,11 +180,25 @@ export async function pingPrinter(ip) {
  * @return {Promise<*>}
  */
 export async function printImage(device, uri, params = {}) {
+  const mod = getBrotherModule();
+
   if (!params.labelSize) {
-    return new Error('Label size must be given when printing a label');
+    throw new Error('Label size must be given when printing a label');
   }
 
-  return _printImage(device, uri, params);
+  if (typeof mod.printImage !== 'function') {
+    throw new Error('printImage is not implemented in native module');
+  }
+
+  try {
+    return await mod.printImage(device, uri, params);
+  } catch (error) {
+    if (device && device.ipAddress) {
+      return mod.printImage(uri, device.ipAddress);
+    }
+
+    throw error;
+  }
 }
 
 // export async function printPDF(device, uri, params = {}) {
