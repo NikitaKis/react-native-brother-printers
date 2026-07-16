@@ -80,13 +80,10 @@ type PrintParams = {
   labelSize: number,
   labelWidth?: number, // Optional, used for roll labels
   labelHeight?: number, // Optional, used for roll labels
+  trimWhiteMargins?: boolean, // Android: trims outer white border from bitmap before print
+  contentScale?: number, // Android: downscale content into label-safe area (0.5..1.0)
+  contentTopInsetPx?: number, // Android: pushes content down to avoid top-edge clipping
 }
-const {
-  discoverPrinters: _discoverPrinters,
-  pingPrinter: _pingPrinter,
-  printPDF: _printPDF,
-} = Platform.OS === 'ios' ? BrotherPrintersIos : BrotherPrinters;
-
 /**
  * Starts the discovery process for brother printers
  *
@@ -100,7 +97,10 @@ export async function discoverPrinters(params = {}) {
   if (Platform.OS === 'ios') {
     return BrotherPrintersIos.discoverPrinters(params);
   } else {
-    return BrotherPrinters.discover();
+    if (BrotherPrinters?.discoverPrinters) {
+      return BrotherPrinters.discoverPrinters(params);
+    }
+    return BrotherPrinters.discover(params);
   }
 }
 
@@ -117,7 +117,7 @@ export async function discoverBluetoothPrinters(params = {}) {
     return [];
   }
 
-  return BrotherPrinters.discoverBluetoothPrinters(params);
+  return BrotherPrinters.discoverBluetoothPrinters();
 }
 
 export async function ReactNativeBrotherPrinters() {
@@ -129,9 +129,17 @@ export async function ReactNativeBrotherPrinters() {
 export async function discoverPrintersUsb() {
   if (Platform.OS === 'ios') {
     return []
-  } else {
+  }
+
+  if (BrotherPrinters?.discoverPrintersUsb) {
+    return BrotherPrinters.discoverPrintersUsb();
+  }
+
+  if (BrotherPrinters?.discoverUsb) {
     return BrotherPrinters.discoverUsb();
   }
+
+  return []
 }
 
 /**
@@ -159,10 +167,29 @@ export async function printImage(device: Device, uri: string, params: PrintParam
     }
     return
   }
-  return BrotherPrinters.printImage(uri, device.ipAddress);
+  if (BrotherPrinters?.printImage) {
+    try {
+      return await BrotherPrinters.printImage(device, uri, params);
+    } catch (error) {
+      const errorMessage = String(error);
+      const shouldUseLegacySignature =
+        errorMessage.includes("arguments") ||
+        errorMessage.includes("expected") ||
+        errorMessage.includes("not a function");
+
+      if (device.ipAddress && shouldUseLegacySignature) {
+        return BrotherPrinters.printImage(uri, device.ipAddress);
+      }
+
+      throw error;
+    }
+  }
+
+  throw new Error("printImage is not implemented in Android native module");
 }
 
-const listeners = BrotherPrintersIos && new NativeEventEmitter(BrotherPrintersIos);
+const brotherEventEmitterModule = BrotherPrintersIos || BrotherPrinters;
+const listeners = brotherEventEmitterModule && new NativeEventEmitter(brotherEventEmitterModule);
 
 export function registerBrotherListener(key: any, method: any) {
   return listeners && listeners.addListener(key, method);

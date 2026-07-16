@@ -1,14 +1,18 @@
 {
   "name": "react-native-brother-printers",
-  "version": "0.4.6",
+  "version": "1.0.0",
   "description": "Brother printers module for React Native",
   "main": "build/index.js",
   "scripts": {
-    "build": "expo-module build",
+    "build": "tsc -p tsconfig.json",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",
     "test:rsc": "jest --config jest-rsc.config.js",
+    "start": "yarn --cwd example start",
+    "android": "yarn --cwd example android",
+    "ios": "yarn --cwd example ios",
+    "web": "yarn --cwd example web",
     "prepare": "expo-module prepare",
     "prepublishOnly": "expo-module prepublishOnly",
     "expo-module": "expo-module"
@@ -23,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/NikitaKis/react-native-brother-printers/issues"
   },
-  "author": "Multisafepay <jose.dominguez@multisafepay.com> (https://github.com/MultiSafepay)",
+  "author": "Nikita Kiselev",
   "license": "MIT",
   "homepage": "https://github.com/NikitaKis/react-native-brother-printers#readme",
   "dependencies": {

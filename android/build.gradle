@@ -31,9 +31,7 @@ if (useManagedAndroidSdkVersions) {
   }
 }
 dependencies {
-  //implementation files('./libs/BrotherPrintLibrary.aar')
-   //implementation fileTree(include: ['*.aar'], dir: 'libs')
-   implementation(name: 'BrotherPrintLibrary', ext: 'aar')
+  implementation files('libs/BrotherPrintLibrary.aar')
 }
 
 android {
