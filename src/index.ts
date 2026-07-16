@@ -189,10 +189,30 @@ export async function printImage(device: Device, uri: string, params: PrintParam
 }
 
 const brotherEventEmitterModule = BrotherPrintersIos || BrotherPrinters;
-const listeners = brotherEventEmitterModule && new NativeEventEmitter(brotherEventEmitterModule);
+const hasNativeEmitterHooks =
+  !!brotherEventEmitterModule &&
+  typeof brotherEventEmitterModule.addListener === "function" &&
+  typeof brotherEventEmitterModule.removeListeners === "function";
+
+const listeners = hasNativeEmitterHooks
+  ? new NativeEventEmitter(brotherEventEmitterModule)
+  : null;
+
+const noopListenerSubscription = {
+  remove: () => {},
+};
 
 export function registerBrotherListener(key: any, method: any) {
-  return listeners && listeners.addListener(key, method);
+  if (!listeners) {
+    if (__DEV__) {
+      console.warn(
+        "registerBrotherListener is unavailable because native event emitter hooks are missing on ReactNativeBrotherPrinters module."
+      );
+    }
+    return noopListenerSubscription;
+  }
+
+  return listeners.addListener(key, method);
 }
 // export {
 //   ReactNativeBrotherPrintersView,
