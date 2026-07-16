@@ -30,24 +30,6 @@ RCT_EXPORT_MODULE()
     ];
 }
 
-
-RCT_REMAP_METHOD(discoverBluetoothPrinters,
-                discoverOptions:(NSDictionary *)options
-                startSearchWithResolver:(RCTPromiseResolveBlock)resolve
-                rejecter:(RCTPromiseRejectBlock)reject) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        (void)options;
-        (void)reject;
-
-        self->_brotherBluetoothDeviceList = [[NSMutableArray alloc] initWithCapacity:0];
-
-        // Keep API contract: emit event and resolve an array while native BT search is unavailable.
-        NSArray *printerInfos = @[];
-        [self sendEventWithName:@"onDiscoverBluetoothPrinters" body:printerInfos];
-        resolve(printerInfos);
-    });
-}
-
 RCT_REMAP_METHOD(discoverBluetoothPrinters,
                 discoverOptions:(NSDictionary *)options
                 startSearchWithResolver:(RCTPromiseResolveBlock)resolve
