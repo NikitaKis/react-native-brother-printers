@@ -48,35 +48,43 @@ RCT_REMAP_METHOD(discoverBluetoothPrinters,
     });
 }
 
-RCT_REMAP_METHOD(discoverPrinters, discoverOptions:(NSDictionary *)options resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
-{
+RCT_REMAP_METHOD(discoverBluetoothPrinters,
+                discoverOptions:(NSDictionary *)options
+                startSearchWithResolver:(RCTPromiseResolveBlock)resolve
+                rejecter:(RCTPromiseRejectBlock)reject) {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSLog(@"Called the function");
+        (void)options;
 
-        _brotherDeviceList = [[NSMutableArray alloc] initWithCapacity:0];
+        BRLMPrinterSearchResult *searcher = [BRLMPrinterSearcher startBluetoothSearch];
+        self->_brotherBluetoothDeviceList = [[NSMutableArray alloc] initWithCapacity:0];
 
-        _networkManager = [[BRPtouchNetworkManager alloc] init];
-        _networkManager.delegate = self;
+        NSMutableArray *printerInfos = [NSMutableArray array];
+        for (BRLMChannel *channel in searcher.channels) {
+            NSMutableDictionary<BRLMChannelExtraInfoKey*, NSString*> *extraInfo = channel.extraInfo;
 
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"PrinterList" ofType:@"plist"];
+            NSString *printerName = extraInfo[BRLMChannelExtraInfoKeyModelName];
+            NSString *modelName = extraInfo[BRLMChannelExtraInfoKeyModelName];
+            NSString *serialNumber = extraInfo[BRLMChannelExtraInfoKeySerialNumber];
+            NSString *channelType = @"BluetoothMFi";
 
-        if (path) {
-            NSDictionary *printerDict = [NSDictionary dictionaryWithContentsOfFile:path];
-            NSArray *printerList = [[NSArray alloc] initWithArray:printerDict.allKeys];
+            NSDictionary *printerInfo = @{
+                @"printerName": printerName ?: @"Unknown",
+                @"modelName": modelName ?: @"Unknown",
+                @"serialNumber": serialNumber ?: @"",
+                @"channelType": channelType
+            };
 
-            [_networkManager setPrinterNames:printerList];
-        } else {
-            NSLog(@"Could not find PrinterList.plist");
+            [printerInfos addObject:printerInfo];
         }
 
-        //    Start printer search
-        int response = [_networkManager startSearch: 5.0];
-
-        if (response == RET_TRUE) {
-            resolve(Nil);
-        } else {
-            reject(DISCOVER_READERS_ERROR, @"A problem occured when trying to execute discoverPrinters", Nil);
+        if (searcher.channels.count == 0) {
+            NSString *errorDescription = [NSString stringWithFormat:@"Error: %@", searcher.error];
+            reject(@"BT_SEARCH_ERROR", errorDescription, nil);
+            return;
         }
+
+        [self sendEventWithName:@"onDiscoverBluetoothPrinters" body:printerInfos];
+        resolve(printerInfos);
     });
 }
 

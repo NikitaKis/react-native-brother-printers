@@ -199,7 +199,7 @@ const listeners = hasNativeEmitterHooks
   : null;
 
 const noopListenerSubscription = {
-  remove: () => {},
+  remove: () => { },
 };
 
 export function registerBrotherListener(key: any, method: any) {
