@@ -9,6 +9,29 @@ applyKotlinExpoModulesCorePlugin()
 useCoreDependencies()
 useExpoPublishing()
 
+def resolveBrotherAarPath() {
+  if (project.hasProperty("brotherPrintLibraryAarPath")) {
+    return project.property("brotherPrintLibraryAarPath")
+  }
+
+  if (rootProject.ext.has("brotherPrintLibraryAarPath")) {
+    return rootProject.ext.get("brotherPrintLibraryAarPath")
+  }
+
+  def envPath = System.getenv("BROTHER_PRINT_LIBRARY_AAR")
+  if (envPath != null && !envPath.trim().isEmpty()) {
+    return envPath
+  }
+
+  return "libs/BrotherPrintLibrary.aar"
+}
+
+def brotherAarPath = resolveBrotherAarPath()
+def brotherAarFile = file(brotherAarPath)
+if (!brotherAarFile.exists()) {
+  throw new GradleException("Brother SDK AAR not found at: ${brotherAarFile}. Set brotherPrintLibraryAarPath or BROTHER_PRINT_LIBRARY_AAR.")
+}
+
 // If you want to use the managed Android SDK versions from expo-modules-core, set this to true.
 // The Android SDK versions will be bumped from time to time in SDK releases and may introduce breaking changes in your module code.
 // Most of the time, you may like to manage the Android SDK versions yourself.
@@ -31,7 +54,7 @@ if (useManagedAndroidSdkVersions) {
   }
 }
 dependencies {
-  implementation files('libs/BrotherPrintLibrary.aar')
+  implementation files(brotherAarFile)
 }
 
 android {

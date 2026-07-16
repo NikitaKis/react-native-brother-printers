@@ -52,6 +52,34 @@ Expected `printImage` params:
 - `content://` URI
 - `http://` or `https://` URL (downloaded to cache before print)
 
+### Google Play 16 KB native library alignment
+
+Google Play may reject uploads with:
+
+- "Recompile your app with 16 KB native library alignment"
+
+This package ships Brother's prebuilt Android SDK AAR. If that AAR contains native `.so` files built with 4 KB ELF alignment, this package cannot fix that by Gradle flags alone.
+
+Use a newer Brother SDK AAR built for 16 KB page-size compatibility and point this module to it.
+
+You can override the AAR path in one of these ways:
+
+1. In your app's `android/build.gradle` root `ext` block:
+
+```gradle
+ext {
+	brotherPrintLibraryAarPath = "../vendor/BrotherPrintLibrary.aar"
+}
+```
+
+2. Or with an environment variable before building:
+
+```bash
+export BROTHER_PRINT_LIBRARY_AAR=/absolute/path/to/BrotherPrintLibrary.aar
+```
+
+The module default remains `android/libs/BrotherPrintLibrary.aar` when no override is provided.
+
 ### Test Android printing in this package
 
 Use the included example app:
